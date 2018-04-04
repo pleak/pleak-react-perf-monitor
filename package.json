@@ -9,6 +9,9 @@
     "watch": "rollup -c -w",
     "prepare": "npm run build"
   },
+  "dependencies": {
+    "fbjs": "^0.8.16"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",

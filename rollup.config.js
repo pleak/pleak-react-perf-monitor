@@ -6,6 +6,7 @@ export default {
     file: 'lib/index.js',
     format: 'cjs',
   },
+  external: ['fbjs/lib/performanceNow'],
   plugins: [
     babel({
       exclude: 'node_modules/**',
