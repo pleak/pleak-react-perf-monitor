@@ -1,0 +1,21 @@
+{
+  "name": "@pleak/react-perf-monitor",
+  "description": "Performance monitoring for React apps with Pleak.",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "rollup": "^0.57.1",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-watch": "^4.3.1"
+  },
+  "files": ["src", "lib"]
+}
