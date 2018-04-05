@@ -1,2 +1,2 @@
 export { captureComponentPerfs } from './perfs';
-export { setContext } from './context';
+export { setContext, setGlobalContext, resetGlobalContext } from './context';

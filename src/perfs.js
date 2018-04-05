@@ -1,7 +1,7 @@
 import performanceNow from 'fbjs/lib/performanceNow';
 
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
-import { getContext, resetContext } from './context';
+import { getContextPayload, resetContext } from './context';
 
 const measureTiming = ({ start }) => performanceNow() - start;
 
@@ -33,7 +33,7 @@ export const captureComponentPerfs = (
       const start = performanceNow();
       const result = fn.call(instance, arguments);
 
-      const context = { ...getContext() };
+      const context = { ...getContextPayload() };
       resetContext();
 
       if (result && result.then) {
