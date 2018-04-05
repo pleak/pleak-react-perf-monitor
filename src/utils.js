@@ -5,3 +5,5 @@ export const isNotAvoidedProperty = property =>
 
 export const isPropertyValid = (instance, excludes) => property =>
   typeof instance[property] === 'function' && !excludes.includes(property);
+
+export const isObject = obj => typeof obj === 'object' && obj !== null;
