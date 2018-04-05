@@ -5,8 +5,11 @@ import { getContext, resetContext } from './context';
 
 const measureTiming = ({ start }) => performanceNow() - start;
 
-const createPerfLogger = ({ name, property, context }) => timing =>
-  console.log({ event: { name, property }, metrics: { timing }, context });
+const createPayload = ({ name, property, timing, context }) => ({
+  event: { name, property },
+  metrics: { timing },
+  context,
+});
 
 export const captureComponentPerfs = (
   instance,
@@ -31,16 +34,33 @@ export const captureComponentPerfs = (
       const result = fn.call(instance, arguments);
 
       const context = { ...getContext() };
-      const log = createPerfLogger({ name, property, context });
-
       resetContext();
 
-      return result && result.then // check if result is Promise
-        ? result.then(
-            res =>
-              debug ? (log(measureTiming({ start }).toFixed(5)), res) : res
-          )
-        : debug ? (log(measureTiming({ start }).toFixed(5)), result) : result;
+      if (result && result.then) {
+        return result.then(res => {
+          const payload = createPayload({
+            name,
+            property,
+            timing: measureTiming({ start }).toFixed(5),
+            context,
+          });
+
+          if (debug) console.info(payload);
+
+          return res;
+        });
+      }
+
+      const payload = createPayload({
+        name,
+        property,
+        timing: measureTiming({ start }).toFixed(5),
+        context,
+      });
+
+      if (debug) console.info(payload);
+
+      return result;
     };
   });
 };
