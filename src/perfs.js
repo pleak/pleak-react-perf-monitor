@@ -2,11 +2,12 @@ import performanceNow from 'fbjs/lib/performanceNow';
 
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
 import { getContextPayload, resetContext } from './context';
+import { getUserAgent } from './deviceUtils';
 
 const measureTiming = ({ start }) => performanceNow() - start;
 
 const createPayload = ({ name, property, timing, context }) => ({
-  event: { name, property },
+  event: { name, property, userAgent: getUserAgent() },
   metrics: { timing },
   context,
 });
