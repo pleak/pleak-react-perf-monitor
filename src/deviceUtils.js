@@ -4,5 +4,12 @@ const { PleakDeviceInfo } = NativeModules;
 
 const isWeb = () => !PleakDeviceInfo && Platform.OS === 'web';
 
-export const getUserAgent = () =>
-  isWeb() ? window.navigator.userAgent : PleakDeviceInfo.userAgent;
+const USER_AGENT = isWeb()
+  ? window.navigator.userAgent
+  : PleakDeviceInfo.userAgent;
+const DEVICE_MODEL = isWeb() ? undefined : PleakDeviceInfo.model;
+const DEVICE_BRAND = isWeb() ? undefined : PleakDeviceInfo.brand;
+
+export const getUserAgent = () => USER_AGENT;
+export const getDeviceModel = () => DEVICE_MODEL;
+export const getDeviceBrand = () => DEVICE_BRAND;

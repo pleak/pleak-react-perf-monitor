@@ -37,6 +37,9 @@ public class PleakDeviceInfoModule extends ReactContextBaseJavaModule {
       }
     }
 
+    constants.put("brand", Build.BRAND);
+    constants.put("model", Build.MODEL);
+
     return constants;
   }
 }
