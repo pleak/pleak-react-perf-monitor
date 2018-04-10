@@ -2,7 +2,12 @@ import performanceNow from 'fbjs/lib/performanceNow';
 
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
 import { getContextPayload, resetContext } from './context';
-import { getUserAgent, getDeviceModel, getDeviceBrand } from './deviceUtils';
+import {
+  getUserAgent,
+  getDeviceModel,
+  getDeviceBrand,
+  getAppId,
+} from './deviceUtils';
 
 const measureTiming = ({ start }) => performanceNow() - start;
 
@@ -12,6 +17,7 @@ const createPayload = ({ name, property, timing, context }) => ({
     userAgent: getUserAgent(),
     brand: getDeviceBrand(),
     model: getDeviceModel(),
+    appId: getAppId(),
   },
   metrics: { timing },
   context,

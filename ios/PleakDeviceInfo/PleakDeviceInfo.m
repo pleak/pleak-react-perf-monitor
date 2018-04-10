@@ -130,12 +130,18 @@ RCT_EXPORT_MODULE()
   return model;
 }
 
+- (NSString *) bundleId
+{
+  return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
+}
+
 - (NSDictionary *) constantsToExport
 {
   return @{
     @"userAgent": self.userAgent ?: [NSNull null],
     @"brand": @"Apple",
     @"model": self.model ?: [NSNull null],
+    @"bundleId": self.bundleId ?: [NSNull null],
   };
 }
 
