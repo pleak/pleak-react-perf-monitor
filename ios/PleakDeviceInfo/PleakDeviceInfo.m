@@ -4,6 +4,10 @@
 
 RCT_EXPORT_MODULE()
 
++ (BOOL) requiresMainQueueSetup {
+  return YES;
+}
+
 - (NSString *) userAgent
 {
   if (TARGET_OS_TV) {
@@ -135,13 +139,42 @@ RCT_EXPORT_MODULE()
   return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 }
 
+- (NSString *) appVersion
+{
+  return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+}
+
+- (NSString *) systemName
+{
+  return self.currentDevice.systemName;
+}
+
+- (NSString *) systemVersion
+{
+  return self.currentDevice.systemVersion;
+}
+
+- (NSString *) deviceUniqueId
+{
+  return [[self.currentDevice identifierForVendor]UUIDString];
+}
+
+- (UIDevice *) currentDevice
+{
+  return [UIDevice currentDevice];
+}
+
 - (NSDictionary *) constantsToExport
 {
   return @{
     @"userAgent": self.userAgent ?: [NSNull null],
     @"brand": @"Apple",
     @"model": self.model ?: [NSNull null],
+    @"deviceUniqueId": self.deviceUniqueId ?: [NSNull null],
     @"bundleId": self.bundleId ?: [NSNull null],
+    @"appVersion": self.appVersion ?: [NSNull null],
+    @"systemName": self.systemName,
+    @"systemVersion": self.systemVersion,
   };
 }
 

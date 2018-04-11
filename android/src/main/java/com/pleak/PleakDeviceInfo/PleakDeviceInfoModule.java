@@ -1,5 +1,8 @@
 package com.pleak.PleakDeviceInfo;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.provider.Settings.Secure;
 import android.os.Build;
 import android.webkit.WebSettings;
 
@@ -25,11 +28,26 @@ public class PleakDeviceInfoModule extends ReactContextBaseJavaModule {
     return "PleakDeviceInfo";
   }
 
+  public String getDeviceUniqueId() {
+    return Secure.getString(this.reactContext.getContentResolver(), Secure.ANDROID_ID);
+  }
+
   @Override
   public @Nullable Map<String, Object> getConstants() {
     HashMap<String, Object> constants = new HashMap<String, Object>();
 
-    constants.put("bundleId", this.reactContext.getPackageName());
+    PackageManager packageManager = this.reactContext.getPackageManager();
+    String packageName = this.reactContext.getPackageName();
+
+    constants.put("bundleId", packageName);
+    constants.put("appVersion", "not available");
+
+    try {
+      PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+      constants.put("appVersion", packageInfo.versionName);
+    } catch (PackageManager.NameNotFoundException e) {
+      e.printStackTrace();
+    }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       try {
@@ -41,6 +59,9 @@ public class PleakDeviceInfoModule extends ReactContextBaseJavaModule {
 
     constants.put("brand", Build.BRAND);
     constants.put("model", Build.MODEL);
+    constants.put("deviceUniqueId", this.getDeviceUniqueId());
+    constants.put("systemName", "Android");
+    constants.put("systemVersion", Build.VERSION.RELEASE);
 
     return constants;
   }
