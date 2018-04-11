@@ -4,6 +4,10 @@
 
 RCT_EXPORT_MODULE()
 
++ (BOOL) requiresMainQueueSetup {
+  return YES;
+}
+
 - (NSString *) userAgent
 {
   if (TARGET_OS_TV) {
