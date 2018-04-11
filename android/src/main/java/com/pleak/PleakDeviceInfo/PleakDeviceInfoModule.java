@@ -2,6 +2,7 @@ package com.pleak.PleakDeviceInfo;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.provider.Settings.Secure;
 import android.os.Build;
 import android.webkit.WebSettings;
 
@@ -25,6 +26,10 @@ public class PleakDeviceInfoModule extends ReactContextBaseJavaModule {
   @Override
   public String getName() {
     return "PleakDeviceInfo";
+  }
+
+  public String getDeviceUniqueId() {
+    return Secure.getString(this.reactContext.getContentResolver(), Secure.ANDROID_ID);
   }
 
   @Override
@@ -54,6 +59,7 @@ public class PleakDeviceInfoModule extends ReactContextBaseJavaModule {
 
     constants.put("brand", Build.BRAND);
     constants.put("model", Build.MODEL);
+    constants.put("deviceUniqueId", this.getDeviceUniqueId());
     constants.put("systemName", "Android");
     constants.put("systemVersion", Build.VERSION.RELEASE);
 
