@@ -150,6 +150,11 @@ RCT_EXPORT_MODULE()
   return self.currentDevice.systemVersion;
 }
 
+- (NSString *) deviceUniqueId
+{
+  return [[self.currentDevice identifierForVendor]UUIDString];
+}
+
 - (UIDevice *) currentDevice
 {
   return [UIDevice currentDevice];
@@ -161,6 +166,7 @@ RCT_EXPORT_MODULE()
     @"userAgent": self.userAgent ?: [NSNull null],
     @"brand": @"Apple",
     @"model": self.model ?: [NSNull null],
+    @"deviceUniqueId": self.deviceUniqueId ?: [NSNull null],
     @"bundleId": self.bundleId ?: [NSNull null],
     @"appVersion": self.appVersion ?: [NSNull null],
     @"systemName": self.systemName,

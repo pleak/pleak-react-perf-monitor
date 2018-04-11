@@ -10,6 +10,7 @@ import {
   getSystemVersion,
   getSystemName,
   getAppVersion,
+  getDeviceUniqueId,
 } from './deviceUtils';
 
 const measureTiming = ({ start }) => performanceNow() - start;
@@ -20,6 +21,7 @@ const createPayload = ({ name, property, timing, context }) => ({
     userAgent: getUserAgent(),
     brand: getDeviceBrand(),
     model: getDeviceModel(),
+    uniqueId: getDeviceUniqueId(),
     appId: getAppId(),
     appVersion: getAppVersion(),
     systemName: getSystemName(),
