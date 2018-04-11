@@ -1,5 +1,7 @@
 package com.pleak.PleakDeviceInfo;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.webkit.WebSettings;
 
@@ -29,7 +31,18 @@ public class PleakDeviceInfoModule extends ReactContextBaseJavaModule {
   public @Nullable Map<String, Object> getConstants() {
     HashMap<String, Object> constants = new HashMap<String, Object>();
 
-    constants.put("bundleId", this.reactContext.getPackageName());
+    PackageManager packageManager = this.reactContext.getPackageManager();
+    String packageName = this.reactContext.getPackageName();
+
+    constants.put("bundleId", packageName);
+    constants.put("appVersion", "not available");
+
+    try {
+      PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+      constants.put("appVersion", packageInfo.versionName);
+    } catch (PackageManager.NameNotFoundException e) {
+      e.printStackTrace();
+    }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       try {
