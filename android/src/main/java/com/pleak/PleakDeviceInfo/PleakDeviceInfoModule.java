@@ -41,6 +41,8 @@ public class PleakDeviceInfoModule extends ReactContextBaseJavaModule {
 
     constants.put("brand", Build.BRAND);
     constants.put("model", Build.MODEL);
+    constants.put("systemName", "Android");
+    constants.put("systemVersion", Build.VERSION.RELEASE);
 
     return constants;
   }

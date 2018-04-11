@@ -135,6 +135,21 @@ RCT_EXPORT_MODULE()
   return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
 }
 
+- (NSString *) systemName
+{
+  return self.currentDevice.systemName;
+}
+
+- (NSString *) systemVersion
+{
+  return self.currentDevice.systemVersion;
+}
+
+- (UIDevice *) currentDevice
+{
+  return [UIDevice currentDevice];
+}
+
 - (NSDictionary *) constantsToExport
 {
   return @{
@@ -142,6 +157,8 @@ RCT_EXPORT_MODULE()
     @"brand": @"Apple",
     @"model": self.model ?: [NSNull null],
     @"bundleId": self.bundleId ?: [NSNull null],
+    @"systemName": self.systemName,
+    @"systemVersion": self.systemVersion,
   };
 }
 
