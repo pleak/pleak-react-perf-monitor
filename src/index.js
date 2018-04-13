@@ -1,2 +1,1 @@
-export { captureComponentPerfs } from './perfs';
-export { setContext, setGlobalContext, resetGlobalContext } from './context';
+export { Pleak } from './Pleak';
