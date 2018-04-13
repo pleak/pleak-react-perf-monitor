@@ -2,31 +2,13 @@ import performanceNow from 'fbjs/lib/performanceNow';
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
 import { measureTiming } from './utils/pleakUtils';
 import { PleakContext } from './PleakContext';
-import {
-  getUserAgent,
-  getDeviceModel,
-  getDeviceBrand,
-  getAppId,
-  getSystemVersion,
-  getSystemName,
-  getAppVersion,
-  getDeviceUniqueId,
-} from './utils/deviceUtils';
+import { getSystemPayload } from './utils/deviceUtils';
 
 export class Pleak {
   constructor({ debug = false } = {}) {
     this.debug = debug;
 
-    this.system = {
-      userAgent: getUserAgent(),
-      brand: getDeviceBrand(),
-      model: getDeviceModel(),
-      uniqueId: getDeviceUniqueId(),
-      appId: getAppId(),
-      appVersion: getAppVersion(),
-      systemName: getSystemName(),
-      systemVersion: getSystemVersion(),
-    };
+    this.system = getSystemPayload();
 
     this.context = new PleakContext();
   }

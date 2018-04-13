@@ -15,11 +15,13 @@ const APP_VERSION = isWeb() ? undefined : PleakDeviceInfo.appVersion;
 const SYSTEM_NAME = isWeb() ? undefined : PleakDeviceInfo.systemName;
 const SYSTEM_VERSION = isWeb() ? undefined : PleakDeviceInfo.systemVersion;
 
-export const getUserAgent = () => USER_AGENT;
-export const getDeviceModel = () => DEVICE_MODEL;
-export const getDeviceBrand = () => DEVICE_BRAND;
-export const getDeviceUniqueId = () => DEVICE_UNIQUE_ID;
-export const getAppId = () => APP_ID;
-export const getAppVersion = () => APP_VERSION;
-export const getSystemName = () => SYSTEM_NAME;
-export const getSystemVersion = () => SYSTEM_VERSION;
+export const getSystemPayload = () => ({
+  userAgent: USER_AGENT,
+  brand: DEVICE_BRAND,
+  model: DEVICE_MODEL,
+  uniqueId: DEVICE_UNIQUE_ID,
+  appId: APP_ID,
+  appVersion: APP_VERSION,
+  systemName: SYSTEM_NAME,
+  systemVersion: SYSTEM_VERSION,
+});
