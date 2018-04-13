@@ -1,9 +1,60 @@
 import performanceNow from 'fbjs/lib/performanceNow';
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
-import { measureTiming, createPayload } from './utils/pleakUtils';
-import { getContextPayload, resetContext } from './context';
+import { measureTiming } from './utils/pleakUtils';
+import { PleakContext } from './PleakContext';
+import {
+  getUserAgent,
+  getDeviceModel,
+  getDeviceBrand,
+  getAppId,
+  getSystemVersion,
+  getSystemName,
+  getAppVersion,
+  getDeviceUniqueId,
+} from './utils/deviceUtils';
 
 export class Pleak {
+  constructor({ debug = false } = {}) {
+    this.debug = debug;
+
+    this.system = {
+      userAgent: getUserAgent(),
+      brand: getDeviceBrand(),
+      model: getDeviceModel(),
+      uniqueId: getDeviceUniqueId(),
+      appId: getAppId(),
+      appVersion: getAppVersion(),
+      systemName: getSystemName(),
+      systemVersion: getSystemVersion(),
+    };
+
+    this.context = new PleakContext();
+  }
+
+  setContext = context => this.context.setContext(context);
+
+  setGlobalContext = context => this.context.setGlobalContext(context);
+
+  createPayload = ({ name, property, timing, context }) => ({
+    event: { name, property },
+    system: this.system,
+    metrics: { timing },
+    context,
+  });
+
+  send = ({ result, name, property, timing, context }) => {
+    const payload = this.createPayload({
+      name,
+      property,
+      timing,
+      context,
+    });
+
+    if (this.debug) console.info(payload);
+
+    return result;
+  };
+
   captureComponentPerfs = (
     instance,
     { identifier, excludes = ['constructor'], debug = false } = {}
@@ -26,34 +77,28 @@ export class Pleak {
         const start = performanceNow();
         const result = fn.call(instance, arguments);
 
-        const context = { ...getContextPayload() };
-        resetContext();
+        const context = this.context.getContextPayload();
+        this.context.resetContext();
 
         if (result && result.then) {
-          return result.then(res => {
-            const payload = createPayload({
+          return result.then(res =>
+            this.send({
+              result: res,
               name,
               property,
-              timing: measureTiming(start).toFixed(5),
+              timing: measureTiming(start),
               context,
-            });
-
-            if (debug) console.info(payload);
-
-            return res;
-          });
+            })
+          );
         }
 
-        const payload = createPayload({
+        return this.send({
+          result,
           name,
           property,
-          timing: measureTiming(start).toFixed(5),
+          timing: measureTiming(start),
           context,
         });
-
-        if (debug) console.info(payload);
-
-        return result;
       };
     });
   };
