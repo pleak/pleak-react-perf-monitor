@@ -8,17 +8,31 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "lint": "eslint --ext .js ./src",
+    "lint:fix": "eslint --fix --ext .js ./src",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "fbjs": "^0.8.16"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.7.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.4",
+    "prettier": "^1.12.0",
     "rollup": "^0.57.1",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-node-resolve": "^3.3.0",

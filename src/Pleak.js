@@ -39,7 +39,7 @@ export class Pleak {
 
   captureComponentPerfs = (
     instance,
-    { identifier, excludes = ['constructor'], debug = false } = {}
+    { identifier, excludes = ['constructor'] } = {}
   ) => {
     const name =
       identifier ||

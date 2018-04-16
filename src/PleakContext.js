@@ -2,21 +2,21 @@ import { isObject } from './utils';
 
 const BASE_CONTEXT = {};
 
-const __PLEAK_CONTEXT__ = Symbol('__PLEAK_CONTEXT__');
-const __PLEAK_GLOBAL_CONTEXT__ = Symbol('__PLEAK_GLOBAL_CONTEXT__');
+const PLEAK_CONTEXT = Symbol('PLEAK_CONTEXT');
+const PLEAK_GLOBAL_CONTEXT = Symbol('PLEAK_GLOBAL_CONTEXT');
 
 export class PleakContext {
   constructor() {
-    this[__PLEAK_CONTEXT__] = BASE_CONTEXT;
-    this[__PLEAK_GLOBAL_CONTEXT__] = BASE_CONTEXT;
+    this[PLEAK_CONTEXT] = BASE_CONTEXT;
+    this[PLEAK_GLOBAL_CONTEXT] = BASE_CONTEXT;
   }
 
   getContext = () => ({
-    ...this[__PLEAK_CONTEXT__],
+    ...this[PLEAK_CONTEXT],
   });
 
   getGlobalContext = () => ({
-    ...this[__PLEAK_GLOBAL_CONTEXT__],
+    ...this[PLEAK_GLOBAL_CONTEXT],
   });
 
   getContextPayload = () => ({
@@ -25,22 +25,22 @@ export class PleakContext {
   });
 
   resetContext = () => {
-    this[__PLEAK_CONTEXT__] = BASE_CONTEXT;
+    this[PLEAK_CONTEXT] = BASE_CONTEXT;
   };
 
   resetGlobalContext = () => {
-    this[__PLEAK_GLOBAL_CONTEXT__] = BASE_CONTEXT;
+    this[PLEAK_GLOBAL_CONTEXT] = BASE_CONTEXT;
   };
 
   setContext = context => {
     isObject(context)
-      ? (this[__PLEAK_CONTEXT__] = context)
+      ? (this[PLEAK_CONTEXT] = context)
       : console.error('[PLEAK] Context should be an object');
   };
 
   setGlobalContext = context => {
     isObject(context)
-      ? (this[__PLEAK_GLOBAL_CONTEXT__] = context)
+      ? (this[PLEAK_GLOBAL_CONTEXT] = context)
       : console.error('[PLEAK] Global context should be an object');
   };
 }
