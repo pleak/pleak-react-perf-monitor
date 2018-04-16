@@ -1,11 +1,12 @@
 {
   "env": {
     "es6": true,
-    "browser": true
+    "browser": true,
+    "jest/globals": true
   },
   "parser": "babel-eslint",
   "extends": ["airbnb", "prettier"],
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "jest"],
   "rules": {
     "prettier/prettier": [2, { "singleQuote": true, "trailingComma": "es5" }],
     "no-console": [2, { "allow": ["info", "warn", "error"] }],
