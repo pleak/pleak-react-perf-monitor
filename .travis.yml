@@ -1,0 +1,16 @@
+dist: trusty
+language: node_js
+node_js:
+  - 9
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+before_script:
+  - yarn
+
+script:
+  - yarn lint
+  - yarn test

@@ -4,5 +4,11 @@
     "transform-object-rest-spread",
     "external-helpers",
     "transform-class-properties"
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": ["env"],
+      "plugins": ["transform-runtime", "transform-class-properties"]
+    }
+  }
 }
