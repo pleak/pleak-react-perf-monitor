@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line
 import { NativeModules, Platform } from 'react-native';
 
 const { PleakDeviceInfo } = NativeModules;

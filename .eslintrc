@@ -11,7 +11,6 @@
     "prettier/prettier": [2, { "singleQuote": true, "trailingComma": "es5" }],
     "no-console": [2, { "allow": ["info", "warn", "error"] }],
     "import/prefer-default-export": 0,
-    "import/extensions": 0,
     "import/no-unresolved": 0,
     "no-param-reassign": 0,
     "no-unused-expressions": ["error", { "allowTernary": true }]

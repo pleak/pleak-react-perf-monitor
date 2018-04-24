@@ -2,15 +2,19 @@ import performanceNow from 'fbjs/lib/performanceNow';
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
 import { measureTiming } from './utils/pleakUtils';
 import { PleakContext } from './PleakContext';
+import { PleakBatchPublisher } from './PleakBatchPublisher';
 import { getSystemPayload } from './utils/deviceUtils';
 
 export class Pleak {
-  constructor({ debug = false } = {}) {
+  constructor({ debug = false, interval = 5000 } = {}) {
     this.debug = debug;
 
     this.system = getSystemPayload();
 
     this.context = new PleakContext();
+    this.batchPublisher = new PleakBatchPublisher({ debug, interval });
+
+    this.batchPublisher.run();
   }
 
   setContext = context => this.context.setContext(context);
@@ -24,7 +28,7 @@ export class Pleak {
     context,
   });
 
-  send = ({ result, name, property, timing, context }) => {
+  processResult = ({ result, name, property, timing, context }) => {
     const payload = this.createPayload({
       name,
       property,
@@ -32,7 +36,9 @@ export class Pleak {
       context,
     });
 
-    if (this.debug) console.info(payload);
+    this.batchPublisher.pushPayload(payload);
+
+    if (this.debug) console.info('[PLEAK] Event', payload);
 
     return result;
   };
@@ -64,7 +70,7 @@ export class Pleak {
 
         if (result && result.then) {
           return result.then(res =>
-            this.send({
+            this.processResult({
               result: res,
               name,
               property,
@@ -74,7 +80,7 @@ export class Pleak {
           );
         }
 
-        return this.send({
+        return this.processResult({
           result,
           name,
           property,
