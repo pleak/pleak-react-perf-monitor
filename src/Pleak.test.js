@@ -11,6 +11,12 @@ jest.mock('./utils/deviceUtils.js', () => ({
   getSystemPayload: jest.fn(),
 }));
 
+jest.mock('./PleakBatchPublisher.js', () => ({
+  PleakBatchPublisher: class {
+    run = () => jest.fn();
+  },
+}));
+
 describe('Pleak', () => {
   const systemPayload = {
     userAgent: 'USER_AGENT',
@@ -27,7 +33,10 @@ describe('Pleak', () => {
   getSystemPayload.mockReturnValue(systemPayload);
   uuid.mockReturnValue('this-should-be-an-uuid');
 
-  const pleak = new Pleak({ environment: 'test' });
+  const pleak = new Pleak({
+    uri: 'https://this-is-a-public-key@getpleak.io/thisisanappid',
+    environment: 'test',
+  });
 
   beforeEach(() => {
     pleak.context.resetContext();
@@ -45,7 +54,7 @@ describe('Pleak', () => {
           timestamp: 123456789,
         })
       ).toEqual({
-        event: {
+        informations: {
           uuid: 'this-should-be-an-uuid',
           component: 'App',
           method: 'componentDidMount',

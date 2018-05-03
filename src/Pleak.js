@@ -1,13 +1,18 @@
 import performanceNow from 'fbjs/lib/performanceNow';
 import uuid from 'uuid/v4';
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
-import { measureTiming, getMethodType } from './utils/pleakUtils';
+import {
+  measureTiming,
+  getMethodType,
+  parsePleakUri,
+} from './utils/pleakUtils';
 import { PleakContext } from './PleakContext';
 import { PleakBatchPublisher } from './PleakBatchPublisher';
 import { getSystemPayload } from './utils/deviceUtils';
 
 export class Pleak {
   constructor({
+    uri,
     debug = false,
     interval = 5000,
     environment = process.env.NODE_ENV,
@@ -18,7 +23,11 @@ export class Pleak {
     this.system = getSystemPayload();
 
     this.context = new PleakContext();
-    this.batchPublisher = new PleakBatchPublisher({ debug, interval });
+    this.batchPublisher = new PleakBatchPublisher({
+      parsedUrl: parsePleakUri(uri),
+      debug,
+      interval,
+    });
 
     this.batchPublisher.run();
   }
@@ -28,7 +37,7 @@ export class Pleak {
   setGlobalContext = context => this.context.setGlobalContext(context);
 
   createPayload = ({ component, method, timing, context, timestamp }) => ({
-    event: {
+    informations: {
       uuid: uuid(),
       component,
       method,

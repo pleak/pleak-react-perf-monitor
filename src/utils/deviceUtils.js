@@ -21,7 +21,7 @@ export const getSystemPayload = () => ({
   brand: DEVICE_BRAND,
   model: DEVICE_MODEL,
   uniqueId: DEVICE_UNIQUE_ID,
-  appId: APP_ID,
+  appIdentifierUrl: APP_ID,
   appVersion: APP_VERSION,
   systemName: SYSTEM_NAME,
   systemVersion: SYSTEM_VERSION,

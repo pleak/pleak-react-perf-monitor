@@ -10,6 +10,7 @@ export default {
   external: [
     'fbjs/lib/performanceNow',
     'uuid/v4',
+    'isomorphic-fetch',
     'react-native',
     'react-native-web',
   ],
