@@ -51,6 +51,7 @@ describe('Pleak', () => {
           method: 'componentDidMount',
           timestamp: 123456789,
           environment: 'test',
+          type: 'LIFECYCLE',
         },
         system: systemPayload,
         metrics: { timing: '12.20000' },

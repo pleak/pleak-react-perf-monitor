@@ -1,7 +1,7 @@
 import performanceNow from 'fbjs/lib/performanceNow';
 import uuid from 'uuid/v4';
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
-import { measureTiming } from './utils/pleakUtils';
+import { measureTiming, getMethodType } from './utils/pleakUtils';
 import { PleakContext } from './PleakContext';
 import { PleakBatchPublisher } from './PleakBatchPublisher';
 import { getSystemPayload } from './utils/deviceUtils';
@@ -34,6 +34,7 @@ export class Pleak {
       method,
       timestamp,
       environment: this.environment,
+      type: getMethodType(method),
     },
     system: this.system,
     metrics: { timing },
