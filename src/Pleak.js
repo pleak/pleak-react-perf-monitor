@@ -1,38 +1,76 @@
 import performanceNow from 'fbjs/lib/performanceNow';
+import uuid from 'uuid/v4';
 import { isNotAvoidedProperty, isPropertyValid } from './utils';
-import { measureTiming } from './utils/pleakUtils';
+import {
+  measureTiming,
+  getMethodType,
+  parsePleakUri,
+} from './utils/pleakUtils';
 import { PleakContext } from './PleakContext';
+import { PleakBatchPublisher } from './PleakBatchPublisher';
 import { getSystemPayload } from './utils/deviceUtils';
 
 export class Pleak {
-  constructor({ debug = false } = {}) {
+  constructor({
+    uri,
+    debug = false,
+    publish = true,
+    interval = 5000,
+    environment = process.env.NODE_ENV,
+  } = {}) {
     this.debug = debug;
+    this.environment = environment;
 
     this.system = getSystemPayload();
 
     this.context = new PleakContext();
+    this.batchPublisher = new PleakBatchPublisher({
+      parsedUrl: parsePleakUri(uri),
+      debug,
+      publish,
+      interval,
+    });
+
+    this.batchPublisher.run();
   }
 
   setContext = context => this.context.setContext(context);
 
   setGlobalContext = context => this.context.setGlobalContext(context);
 
-  createPayload = ({ name, property, timing, context }) => ({
-    event: { name, property },
+  createPayload = ({ component, method, timing, context, timestamp }) => ({
+    informations: {
+      uuid: uuid(),
+      component,
+      method,
+      timestamp,
+      environment: this.environment,
+      type: getMethodType(method),
+    },
     system: this.system,
     metrics: { timing },
     context,
   });
 
-  send = ({ result, name, property, timing, context }) => {
+  processResult = ({
+    result,
+    component,
+    method,
+    timing,
+    context,
+    timestamp,
+  }) => {
     const payload = this.createPayload({
-      name,
-      property,
+      component,
+      method,
       timing,
       context,
+      timestamp,
     });
 
-    if (this.debug) console.info(payload);
+    this.batchPublisher.pushPayload(payload);
+
+    if (this.debug) console.info('[PLEAK] Event', payload);
 
     return result;
   };
@@ -41,7 +79,7 @@ export class Pleak {
     instance,
     { identifier, excludes = ['constructor'] } = {}
   ) => {
-    const name =
+    const component =
       identifier ||
       instance.constructor.displayName ||
       instance.constructor.name ||
@@ -52,10 +90,11 @@ export class Pleak {
       ...Object.getOwnPropertyNames(Object.getPrototypeOf(instance)),
     ];
 
-    properties.filter(isPropertyValid(instance, excludes)).forEach(property => {
-      const fn = instance[property];
+    properties.filter(isPropertyValid(instance, excludes)).forEach(method => {
+      const fn = instance[method];
 
-      instance[property] = () => {
+      instance[method] = () => {
+        const timestamp = Date.now();
         const start = performanceNow();
         const result = fn.call(instance, arguments);
 
@@ -64,22 +103,24 @@ export class Pleak {
 
         if (result && result.then) {
           return result.then(res =>
-            this.send({
+            this.processResult({
               result: res,
-              name,
-              property,
+              component,
+              method,
               timing: measureTiming(start),
               context,
+              timestamp,
             })
           );
         }
 
-        return this.send({
+        return this.processResult({
           result,
-          name,
-          property,
+          component,
+          method,
           timing: measureTiming(start),
           context,
+          timestamp,
         });
       };
     });

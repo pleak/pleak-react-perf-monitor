@@ -1,12 +1,21 @@
+import uuid from 'uuid/v4';
+import performanceNow from 'fbjs/lib/performanceNow';
 import { Pleak } from './Pleak';
+import { getSystemPayload } from './utils/deviceUtils';
+
+jest.mock('uuid/v4');
 
 jest.mock('fbjs/lib/performanceNow');
-const performanceNow = require('fbjs/lib/performanceNow');
 
 jest.mock('./utils/deviceUtils.js', () => ({
   getSystemPayload: jest.fn(),
 }));
-const { getSystemPayload } = require('./utils/deviceUtils');
+
+jest.mock('./PleakBatchPublisher.js', () => ({
+  PleakBatchPublisher: class {
+    run = () => jest.fn();
+  },
+}));
 
 describe('Pleak', () => {
   const systemPayload = {
@@ -22,8 +31,12 @@ describe('Pleak', () => {
 
   performanceNow.mockReturnValue(1000);
   getSystemPayload.mockReturnValue(systemPayload);
+  uuid.mockReturnValue('this-should-be-an-uuid');
 
-  const pleak = new Pleak();
+  const pleak = new Pleak({
+    uri: 'https://this-is-a-public-key@getpleak.io/thisisanappid',
+    environment: 'test',
+  });
 
   beforeEach(() => {
     pleak.context.resetContext();
@@ -34,15 +47,20 @@ describe('Pleak', () => {
     it('should return a payload', () => {
       expect(
         pleak.createPayload({
-          name: 'App',
-          property: 'componentDidMount',
+          component: 'App',
+          method: 'componentDidMount',
           timing: '12.20000',
           context: { user: 'Bob' },
+          timestamp: 123456789,
         })
       ).toEqual({
-        event: {
-          name: 'App',
-          property: 'componentDidMount',
+        informations: {
+          uuid: 'this-should-be-an-uuid',
+          component: 'App',
+          method: 'componentDidMount',
+          timestamp: 123456789,
+          environment: 'test',
+          type: 'LIFECYCLE',
         },
         system: systemPayload,
         metrics: { timing: '12.20000' },

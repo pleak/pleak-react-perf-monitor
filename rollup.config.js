@@ -7,7 +7,13 @@ export default {
     file: 'lib/index.js',
     format: 'cjs',
   },
-  external: ['fbjs/lib/performanceNow', 'react-native', 'react-native-web'],
+  external: [
+    'fbjs/lib/performanceNow',
+    'uuid/v4',
+    'isomorphic-fetch',
+    'react-native',
+    'react-native-web',
+  ],
   plugins: [
     babel({
       exclude: 'node_modules/**',
