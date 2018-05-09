@@ -12,6 +12,10 @@ export class PleakBatchPublisher {
     this.publish = publish;
     this.interval = interval;
 
+    const { protocol, host, appId, publicKey } = this.parsedUrl;
+    this.url = `${protocol}://${host}/collect/${appId}`;
+    this.publicKey = publicKey;
+
     this.batchedPayloads = [];
   }
 
@@ -24,30 +28,27 @@ export class PleakBatchPublisher {
   };
 
   publishEvents = () => {
-    const { protocol, host, appId, publicKey } = this.parsedUrl;
-    const url = `${protocol}://${host}/collect/${appId}`;
+    if (this.batchedPayloads.length > 0 && this.publish) {
+      if (this.debug) {
+        console.info('[PLEAK] Publishing events', this.batchedPayloads);
+      }
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: publicKey,
-      },
-      body: JSON.stringify({
-        events: this.batchedPayloads,
-      }),
-    });
+      fetch(this.url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: this.publicKey,
+        },
+        body: JSON.stringify({
+          events: this.batchedPayloads,
+        }),
+      });
+
+      this.clearPayloads();
+    }
   };
 
   run = () => {
-    this.batchInterval = setInterval(() => {
-      if (this.batchedPayloads.length > 0 && this.publish) {
-        if (this.debug) {
-          console.info('[PLEAK] Publishing events', this.batchedPayloads);
-        }
-        this.publishEvents();
-      }
-      this.clearPayloads();
-    }, this.interval);
+    this.batchInterval = setInterval(this.publishEvents, this.interval);
   };
 }
