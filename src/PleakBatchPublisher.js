@@ -1,9 +1,15 @@
 import fetch from 'isomorphic-fetch';
 
 export class PleakBatchPublisher {
-  constructor({ parsedUrl = {}, debug = false, interval = 5000 } = {}) {
+  constructor({
+    parsedUrl = {},
+    debug = false,
+    publish = true,
+    interval = 5000,
+  } = {}) {
     this.parsedUrl = parsedUrl;
     this.debug = debug;
+    this.publish = publish;
     this.interval = interval;
 
     this.batchedPayloads = [];
@@ -17,7 +23,7 @@ export class PleakBatchPublisher {
     this.batchedPayloads = [];
   };
 
-  publish = () => {
+  publishEvents = () => {
     const { protocol, host, appId, publicKey } = this.parsedUrl;
     const url = `${protocol}://${host}/collect/${appId}`;
 
@@ -35,11 +41,11 @@ export class PleakBatchPublisher {
 
   run = () => {
     this.batchInterval = setInterval(() => {
-      if (this.batchedPayloads.length > 0) {
+      if (this.batchedPayloads.length > 0 && this.publish) {
         if (this.debug) {
           console.info('[PLEAK] Publishing events', this.batchedPayloads);
         }
-        this.publish();
+        this.publishEvents();
       }
       this.clearPayloads();
     }, this.interval);

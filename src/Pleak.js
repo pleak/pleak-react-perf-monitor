@@ -14,6 +14,7 @@ export class Pleak {
   constructor({
     uri,
     debug = false,
+    publish = true,
     interval = 5000,
     environment = process.env.NODE_ENV,
   } = {}) {
@@ -26,6 +27,7 @@ export class Pleak {
     this.batchPublisher = new PleakBatchPublisher({
       parsedUrl: parsePleakUri(uri),
       debug,
+      publish,
       interval,
     });
 
