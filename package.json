@@ -2,7 +2,7 @@
   "name": "@pleak/react-perf-monitor",
   "description":
     "Performance monitoring for React and React Native apps with Pleak.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c",
