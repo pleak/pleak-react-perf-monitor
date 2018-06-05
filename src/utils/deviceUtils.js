@@ -1,7 +1,8 @@
 /* eslint-disable */
 let PleakDeviceInfo;
 
-const isWeb = () => window.navigator !== undefined;
+const isWeb = () =>
+  window.navigator !== undefined && window.navigator.product !== 'ReactNative';
 
 if (!isWeb()) {
   try {

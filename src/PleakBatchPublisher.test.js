@@ -1,6 +1,6 @@
 import { PleakBatchPublisher } from './PleakBatchPublisher';
 
-jest.mock('isomorphic-fetch');
+jest.mock('cross-fetch');
 jest.useFakeTimers();
 
 describe('PleakBatchPublisher', () => {
