@@ -1,9 +1,9 @@
 {
   "name": "@pleak/react-perf-monitor",
-  "description": "Performance monitoring for React and React Native apps with Pleak.",
+  "description":
+    "Performance monitoring for React and React Native apps with Pleak.",
   "version": "0.1.0",
   "main": "lib/index.js",
-  "license": "MIT",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
@@ -44,10 +44,6 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-watch": "^4.3.1"
   },
-  "files": [
-    "src",
-    "lib",
-    "ios",
-    "android"
-  ]
+  "files": ["src", "lib", "ios", "android"],
+  "keywords": ["react", "react-native", "performance"]
 }
