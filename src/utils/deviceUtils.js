@@ -1,9 +1,16 @@
-// eslint-disable-next-line
-import { NativeModules, Platform } from 'react-native';
+/* eslint-disable */
+let PleakDeviceInfo;
 
-const { PleakDeviceInfo } = NativeModules;
+const isWeb = () =>
+  window.navigator !== undefined && window.navigator.product !== 'ReactNative';
 
-const isWeb = () => !PleakDeviceInfo && Platform.OS === 'web';
+if (!isWeb()) {
+  try {
+    const { NativeModules } = require('react-native');
+
+    PleakDeviceInfo = NativeModules.PleakDeviceInfo;
+  } catch (err) {}
+}
 
 const USER_AGENT = isWeb()
   ? window.navigator.userAgent
