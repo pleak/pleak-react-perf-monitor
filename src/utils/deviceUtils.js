@@ -1,4 +1,6 @@
 /* eslint-disable */
+import uuid from 'uuid/v4';
+
 let PleakDeviceInfo;
 
 const isWeb = () =>
@@ -12,16 +14,12 @@ if (!isWeb()) {
   } catch (err) {}
 }
 
-const generateCookieId = () => {
-  return Math.random().toString(36).substr(2, 9) + Number(new Date())
-}
-
 const pleakCookie = () => {
-  const _pleak = document.cookie.replace(/(?:(?:^|.*;\s*)_pleak\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-  if (_pleak.length > 0) {
-    return _pleak
+  const pleakCookie = document.cookie.replace(/(?:(?:^|.*;\s*)_pleak\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+  if (pleakCookie.length > 0) {
+    return pleakCookie
   } else {
-    const cookie = generateCookieId()
+    const cookie = uuid()
     document.cookie = `_pleak=${cookie}`
     return cookie
   }
