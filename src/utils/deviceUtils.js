@@ -12,12 +12,27 @@ if (!isWeb()) {
   } catch (err) {}
 }
 
+const generateCookieId = () => {
+  return Math.random().toString(36).substr(2, 9) + Number(new Date())
+}
+
+const pleakCookie = () => {
+  const _pleak = document.cookie.replace(/(?:(?:^|.*;\s*)_pleak\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+  if (_pleak.length > 0) {
+    return _pleak
+  } else {
+    const cookie = generateCookieId()
+    document.cookie = `_pleak=${cookie}`
+    return cookie
+  }
+}
+
 const USER_AGENT = isWeb()
   ? window.navigator.userAgent
   : PleakDeviceInfo.userAgent;
 const DEVICE_MODEL = isWeb() ? undefined : PleakDeviceInfo.model;
 const DEVICE_BRAND = isWeb() ? undefined : PleakDeviceInfo.brand;
-const DEVICE_UNIQUE_ID = isWeb() ? undefined : PleakDeviceInfo.deviceUniqueId;
+const DEVICE_UNIQUE_ID = isWeb() ? pleakCookie() : PleakDeviceInfo.deviceUniqueId;
 const APP_ID = isWeb() ? window.location.hostname : PleakDeviceInfo.bundleId;
 const APP_VERSION = isWeb() ? undefined : PleakDeviceInfo.appVersion;
 const SYSTEM_NAME = isWeb() ? undefined : PleakDeviceInfo.systemName;
