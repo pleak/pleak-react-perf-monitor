@@ -2,7 +2,7 @@
   "name": "@pleak/react-perf-monitor",
   "description":
     "Performance monitoring for React and React Native apps with Pleak.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "BSD-2-Clause",
   "main": "lib/index.js",
   "scripts": {
