@@ -3,6 +3,7 @@
   "description":
     "Performance monitoring for React and React Native apps with Pleak.",
   "version": "0.1.2",
+  "license": "BSD-2-Clause",
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c",
