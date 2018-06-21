@@ -93,10 +93,10 @@ export class Pleak {
     properties.filter(isPropertyValid(instance, excludes)).forEach(method => {
       const fn = instance[method];
 
-      instance[method] = () => {
+      instance[method] = (...args) => {
         const timestamp = Date.now();
         const start = performanceNow();
-        const result = fn.call(instance, arguments);
+        const result = fn.call(instance, ...args);
 
         const context = this.context.getContextPayload();
         this.context.resetContext();
